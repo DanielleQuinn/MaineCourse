@@ -15,7 +15,7 @@
 getwd()
 
 # Hint: Use the tab key to easily navigate folders
-setwd("C:/Users/Danielle/Desktop/MaineR")
+setwd("C:/Users/danie/Desktop/Maine")
 
 # ---- Load Packages ----
 library(lubridate)

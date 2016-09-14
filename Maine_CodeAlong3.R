@@ -56,7 +56,7 @@ mydata[mydata$sex=="m",]
 
 # Option 2 (dplyr)
 mydata%>%
-  filer(sex=="m")
+  filter(sex=="m")
 
 # Subset mydata to only look at year and length columns
 # Option 1 (indexing)
@@ -106,7 +106,7 @@ mweight<-c()
 sdweight<-c()
 for(i in year)
 {
-  for(ii in unique(mydata))
+  for(ii in unique(mydata$sex))
   {
     sex.in<-as.character(ii)
     sex<-c(sex, sex.in)
@@ -124,10 +124,10 @@ table2<-data.frame(year, sex, mweight, sdweight)
 table2
 
 # And here's the summaryBy solution
-table2<-summaryBy(mweight~year+sex,
+table2<-summaryBy(weight~year+sex,
           data=mydata[mydata$length>10 & !is.na(mydata$length),],
           FUN=c(mean, sd),
-          na,.rm=TRUE)
+          na.rm=TRUE)
 names(table2)<-c("year","sex","mweight","sdweight")
 table2
 
@@ -144,7 +144,6 @@ plot(x=mydata$sex, y=mydata$length)
 plot(mydata$length~mydata$sex)
 
 # boxplot(): boxplot, one numeric vector, one factor vector
-boxplot(x=mydata$sex, y=mydata$length)
 boxplot(mydata$length~mydata$sex)
 
 # hist(): histogram, one numeric vector
@@ -152,14 +151,14 @@ hist(mydata$length)
 
 # ---- Visualizations {ggplot2} ----
 # Layer based
-ggplot(mydata, aes(x=length, y=mass))+
+ggplot(mydata, aes(x=length, y=weight))+
   geom_point()
 
 ggplot(mydata)+
-  geom_point(aes(x=length, y=mass))
+  geom_point(aes(x=length, y=weight))
 
 ggplot()+
-  geom_point(aes(x=length, y=mass), data=mydata)
+  geom_point(aes(x=length, y=weight), data=mydata)
 
 # Add colour using the argument col = 'red'
 # If col is outside of the aes() function.
@@ -175,7 +174,7 @@ ggplot(mydata)+
 # Exercise 2.1
 # (A)
 dtvec<-paste(exdata$day, exdata$month, exdata$year, exdata$hour, exdata$minute, 0, sep="-")
-exdata$datetime<-dym_hms(dtvec)
+exdata$datetime<-dmy_hms(dtvec)
 # or, in a single line of code
 exdata$datetime<-dmy_hms(paste(exdata$day, exdata$month, exdata$year, exdata$hour, exdata$minute, 0, sep="-"))
 

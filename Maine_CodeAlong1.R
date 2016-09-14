@@ -77,7 +77,7 @@ as.numeric(mycounts)
 
 # ---- R Basics: NAs ----
 ncounts<-as.numeric(mycounts) # Convert mycounts to numeric and name it ncounts
-mean(ncoutns) # Average ncounts
+mean(ncounts) # Average ncounts
 
 # Most functions have an argument specifically used to ignore NAs
 mean(ncounts, na.rm=TRUE) # Default na.rm=FALSE
