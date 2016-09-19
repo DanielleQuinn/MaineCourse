@@ -7,25 +7,37 @@
 # Enjoy!
 
 # ---- Import Data ----
+exdata<-read.delim("date_data.txt")
+View(exdata)
 
 # ---- Dates in {lubridate} ----
+# "dd-mm-year"
 # Use the paste() function to create a vector of class character
-
+datevec<-paste(exdata$day,exdata$month,exdata$year, sep="-")
+class(datevec)
 # Wrap this vector in dmy() and use it to create a new column
+exdata$date<-dmy(datevec)
 
 # Take a look!
- # You can see the new column, of class POSIX (date)
+str(exdata) # You can see the new column, of class POSIX (date)
  # The date column, as a vector of class POSIX
 
 # ---- Exercise 2.1 ----
 # (A) Use dmy_hms() to create a column in exdata called
 # datetime that contains both date and time information.
+exdata$datetime<-dmy_hms(paste(exdata$day, exdata$month, 
+                               exdata$year, exdata$hour, 
+                               exdata$minute, 
+                               exdata$second, 
+                               sep="-"))
+
+str(exdata)
 
 # ---- Summary Stats ----
 # There are many simple ways to summarize data
 # Counts
- # How many records per year?
- # How many records per year, by sex?
+table(mydata$year) # How many records per year?
+table(mydata$year, mydata$sex) # How many records per year, by sex?
 
 # Statistics
 library(doBy) # You'll need to load this library
@@ -47,13 +59,17 @@ library(doBy) # You'll need to load this library
 
 # Subset mydata to only look at males
 # Option 1 (indexing)
-
+mydata[mydata$length>10,]
 # Option 2 (dplyr)
+mydata%>%
+  filter(length>10)
 
 # Subset mydata to only look at year and length columns
 # Option 1 (indexing)
-
+mydata[,c("year","length")]
 # Option 2 (dplyr)
+mydata%>%
+  select(year, length)
 
 # Find the mean length by year
 # Option 1 (indexing and looping)
@@ -72,6 +88,10 @@ table1<-summaryBy(length~year, data=mydata, na.rm=TRUE)
 table1
 
 # Option 3 (dplyr)
+mydata%>%
+  group_by(year)%>%
+  summarise(mlength=mean(length, na.rm=TRUE))%>%
+  data.frame()
 
 # Indexing, looping, table(), summaryBy(), and {dplyr} all
 # have pros and cons; you'll likely use all of them
@@ -82,6 +102,13 @@ table1
 # the mean weights of individuals with a length
 # greater than 10, by both sex and year, along
 # with the standard deviation around those means
+
+mydata%>%
+  group_by(year,sex)%>%
+  filter(length>10)%>%
+  summarise(mweight=mean(weight, na.rm=TRUE), 
+            msd=sd(weight, na.rm=TRUE))%>%
+  data.frame
 
 # Note: Here's the indexing / looping solution
 year<-unique(mydata$year)
@@ -129,12 +156,22 @@ table2
 
 # ---- Visualizations {ggplot2} ----
 # Layer based
+ggplot(mydata)+
+  geom_point(aes(x=length, y=weight),size=6)+
+  theme_bw(22)+xlab("Length")+ylab("Weight")
 
 # Add colour using the argument col = 'red
 # If col is outside of the aes() function.
+ggplot(mydata)+
+  geom_point(aes(x=length, y=weight),size=6, col="red")+
+  theme_bw(22)+xlab("Length")+ylab("Weight")
 
 # If col is inside the aes() function, it can be
 # linked to the dataset
+ggplot(mydata)+
+  geom_point(aes(x=length, y=weight, col=sex),size=6)+
+  theme_bw(22)+xlab("Length")+ylab("Weight")
+
 
 # ---- Exercise Solutions ----
 # Exercise 2.1

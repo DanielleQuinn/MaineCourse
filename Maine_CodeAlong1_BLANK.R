@@ -7,6 +7,7 @@
 
 # ---- R Basics: Calculator ----
 # R follows order of operations
+7*5+90/(10+2)
 
 # ---- R Basics: Functions ----
 # Functions are used to "do things" in R
@@ -21,6 +22,9 @@
 # You only need to install a package once
 
 # You need to load installed packages each time you use R
+library(ggplot2)
+library(lubridate)
+library(dplyr)
 
 # ---- R Basics: Help Pages ----
  # Search loaded packages for sum()
@@ -40,6 +44,7 @@
 # reshape2
 
 # (D) Bring up the help page for mean()
+?mean()
 
 # ---- R Basics: Objects ----
 # An object is a stored value or set of values
@@ -55,36 +60,47 @@
  # built in vector
 
  # Create our own vector object
+mycols<-c("red","blue","yellow","green")
 
 # ---- R Basics: Data Classes ----
 # Variables can have various classes
 # Vectors can only contain one class ("atomic")
-
- # What class is mycols?
- # View it as a factor
+mycols
+class(mycols) # What class is mycols?
+as.factor(mycols) # View it as a factor
 
 mycounts<-c(1,6,13,2,"about 5",2)
- # Average mycounts
- # What class is mycounts?
+mean(mycounts) # Average mycounts
+class(mycounts) # What class is mycounts?
 
 # ---- R Basics: NAs ----
- # Convert mycounts to numeric and name it ncounts
- # Average ncounts
+ncounts<-as.numeric(mycounts) # Convert mycounts to numeric and name it ncounts
 
-# Most functions have an argument specifically used to ignore NAs
+mean(ncounts) # Average ncounts
+
+mean(ncounts, na.rm=TRUE)  # Most functions have an argument specifically used to ignore NAs
  # Default na.rm=FALSE
 
 # ---- Exercise 1.3 ----
 # (A) Create a scalar called myname that contains your first name
+myname<-"Danielle"
 
 # (B) Create a vector called mybirthday that contains three numeric elements;
 # your day, month, and year of birth
+mybirthday<-c(17,01,1988)
 
 # (C) Create a vector called test that contains both numeric and character
 # elements. What does class() tell you about test?
+test<-c(1,15,"a",5)
+test
 
 # (D) Convert test to a factor and call it ftest. Now convert ftest
 # to a numeric object called ntest. What do you notice about ntest?
+ftest<-as.factor(test)
+ftest
+ntest<-as.numeric(ftest)
+ntest
+ntest<-as.numeric(as.character(ftest))
 
 # ---- R Basics: Indexing ----
 # Positional attributes designated by []
@@ -137,9 +153,11 @@ mycounts<-c(1,6,13,2,"about 5",2)
 # from a function
 # seq()
 # rnorm()
+numvals<-seq(from=1, to=300, by=5)
+numvals
 
 # (B) Take a good look at your object
-# length()
+length(numvals)
 # max()
 # sort()
 # unique()
@@ -147,10 +165,18 @@ mycounts<-c(1,6,13,2,"about 5",2)
 # quantile()
 
 # (C) Find all values of numvals greater than the average.
+mean(numvals) # Find the average
+# Hard Coding
+numvals[numvals>148.5] # BAD
+# Soft Coding
+numvals[numvals>mean(numvals)] #GOOD
 
 # (D) Find all values of numvals that are in the top 10%.
 # Store these values in an object called topvals
 # Hint: ?quantile()
+quantile(numvals, probs=0.9)
+topvals<-numvals[numvals>quantile(numvals, probs=0.9)]
+topvals
 
 # ---- Exercise Solutions ----
 # Exercise 1.2
